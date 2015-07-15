@@ -5,7 +5,8 @@ module Cookies
   end
 
   def load_game
-    JSON.parse(request.cookies[:game_state])
+    cookie = request.cookies[:game_state]
+    JSON.parse(cookie) if cookie
   end
 
 end

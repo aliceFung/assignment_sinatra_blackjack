@@ -1,6 +1,7 @@
 require 'sinatra'
 require 'sinatra/reloader' if development?
 require 'pry'
+require 'json'
 require './helpers/cookies.rb'
 require './helpers/blackjack.rb'
 
@@ -12,18 +13,23 @@ get '/' do
 end
 
 get '/blackjack' do
-  game = Blackjack.new #(cookie)
-  redirect to("/result/win") if game.win?
-  redirect to("/result/loss") if game.bust?
-  @output = @game.render
+  binding.pry
+  instance = Blackjack.new(load_game)
+  redirect to("/result/win") if instance.win?
+  redirect to("/result/loss") if instance.bust?
+  @output = instance.render
   erb :blackjack
-
+  #if hit, set cookie["hit"] = true
 end
 
-post '/blackjack/hit'
+post '/blackjack/hit' do
+  binding.pry
+  instance = Blackjack.new(load_game)
+  instance.hit
   # game logic
-  #save cooke
+  save_game(instance.game)#save cookie
   redirect to ('/blackjack')
+end
 
 
 get 'result/win' do

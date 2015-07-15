@@ -1,4 +1,5 @@
 class Blackjack
+  attr_reader :game
 
   SUITS= ["Hearts", "Clubs", "Spades", "Diamonds"]
 
@@ -75,16 +76,16 @@ class Blackjack
 
 
     #adding everything but the ace
-    hand.each do |card|
+    arr.each do |card|
       total += card[:value] if (2..10).include?(card[:value])
       total += 10           if (11..13).include?(card[:value])
-      if card[:value] == 1 
+      if card[:value] == 1
         total += 11
         aces += 1
       end
     end
 
-    until total < 21 && aces == 0
+    until total < 21 && aces < 1
       total -= 10
       aces -= 1
     end
