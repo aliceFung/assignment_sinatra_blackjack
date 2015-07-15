@@ -1,0 +1,25 @@
+/index
+  welcome screen
+  click to start game ==> get /blackjack
+
+
+get /blackjack
+  if cookie, then BJ = Blackjack.new(gamestate)
+  else Blackjack.new(nil)
+
+  render Blackjack.table
+
+  check bust/blackjack/win
+
+  hit and stay buttons
+
+    hit redirect => post/blackjack/hit
+    stay redirect => post/blackjack/stay
+    (optional: double down, split)
+
+post /blackjack/hit
+
+  
+
+
+
