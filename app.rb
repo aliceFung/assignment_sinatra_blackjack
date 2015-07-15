@@ -16,7 +16,7 @@ get '/' do
 end
 
 get '/blackjack' do
-
+  @money = bankroll
   instance = Blackjack.new(load_game)
   redirect to("/result/win") if instance.win?
   redirect to("/result/loss") if instance.bust?
@@ -30,7 +30,10 @@ end
 post '/blackjack' do
 
   instance = Blackjack.new(load_game)
-  instance.hit if params[:input] == "hit"
+  if params[:input] == "hit"
+      instance.hit
+      bankroll -= 10
+  end
   save_game(instance.game)
   # binding.pry
   redirect to('/blackjack/dealer') if params[:input] == "stay"

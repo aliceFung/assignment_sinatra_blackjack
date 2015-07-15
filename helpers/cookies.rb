@@ -11,4 +11,17 @@ module Cookies
     end
   end
 
+  def bankroll
+    unless (session["bankroll"].nil?)
+      return JSON.parse(session["bankroll"]).to_i
+    else
+      session["bankroll"] = 100.to_json
+      return 100
+    end
+  end
+
+  def bankroll=(amt)
+    session["bankroll"] = amt.to_json
+  end
+
 end
