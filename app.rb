@@ -21,7 +21,7 @@ get '/blackjack' do
   # binding.pry
   erb :blackjack
   # binding.pry
-  
+
 end
 
 post '/blackjack' do
@@ -35,4 +35,8 @@ end
 
 get 'result/win' do
   erb :win
+end
+
+get 'result/loss' do
+  erb :loss
 end
