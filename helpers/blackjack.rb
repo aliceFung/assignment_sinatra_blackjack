@@ -6,6 +6,9 @@ class Blackjack
   def initialize(state = nil)
     if state
       @game = state
+      @deck = @game[0]
+      @hand = @game[1]
+      @dealer = @game[2]
 
     else
       @deck = generate_deck
@@ -20,7 +23,7 @@ class Blackjack
     values = (1..13).to_a
 
     52.times do |i|
-      deck << {suit: SUITS[i%4], value: values[i%13]}
+      deck << {"suit" => SUITS[i%4], "value" => values[i%13]}
     end
 
     deck.shuffle!
@@ -43,15 +46,14 @@ class Blackjack
 
   def render
     special_names = {1 => "Ace", 11 => "Jack", 12 => "Queen", 13 => "King"}
-    current_hand = @hand
 
     str = "Your Cards:<br>"
 
-    current_hand.each do |card|
-      if special_names[card[:value]]
-        str += "#{special_names[card[:value]]} of #{card[:suit]}<br>"
+    @hand.each do |card|
+      if special_names[card["value"]]
+        str += "#{special_names[card["value"]]} of #{card["suit"]}<br>"
       else
-        str += "#{card[:value]} of #{card[:suit]}<br>"
+        str += "#{card["value"]} of #{card["suit"]}<br>"
       end
     end
 
@@ -59,10 +61,10 @@ class Blackjack
 
     current_hand = @dealer
     @dealer[1..-1].each do |card|
-      if special_names[card[:value]]
-        str += "#{special_names[card[:value]]} of #{card[:suit]}<br>"
+      if special_names[card["value"]]
+        str += "#{special_names[card["value"]]} of #{card["suit"]}<br>"
       else
-        str += "#{card[:value]} of #{card[:suit]}<br>"
+        str += "#{card["value"]} of #{card["suit"]}<br>"
       end
     end
     str += "And an unknown card."
@@ -70,22 +72,22 @@ class Blackjack
     str
   end
 
-  def hand_value(arr)
+  def hand_value(arr = @hand)
     total = 0
     aces = 0
 
 
     #adding everything but the ace
     arr.each do |card|
-      total += card[:value] if (2..10).include?(card[:value])
-      total += 10           if (11..13).include?(card[:value])
-      if card[:value] == 1
+      total += card["value"] if (2..10).include?(card["value"])
+      total += 10           if (11..13).include?(card["value"])
+      if card["value"] == 1
         total += 11
         aces += 1
       end
     end
 
-    until total < 21 && aces < 1
+    while total > 21 && aces > 0
       total -= 10
       aces -= 1
     end

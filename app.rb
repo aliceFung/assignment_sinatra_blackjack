@@ -13,21 +13,22 @@ get '/' do
 end
 
 get '/blackjack' do
-  binding.pry
   instance = Blackjack.new(load_game)
   redirect to("/result/win") if instance.win?
   redirect to("/result/loss") if instance.bust?
   @output = instance.render
+  save_game(instance.game)
+  # binding.pry
   erb :blackjack
-  #if hit, set cookie["hit"] = true
+  # binding.pry
+  
 end
 
-post '/blackjack/hit' do
-  binding.pry
+post '/blackjack' do
   instance = Blackjack.new(load_game)
-  instance.hit
-  # game logic
+  instance.hit if params[:input] == "hit"
   save_game(instance.game)#save cookie
+  # binding.pry
   redirect to ('/blackjack')
 end
 
