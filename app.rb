@@ -19,7 +19,12 @@ end
 
 get '/blackjack' do
   @money = bankroll
-  
+  unless load_game
+    @money -= 10
+  end
+
+  set_bankroll(@money)
+
   instance = Blackjack.new(load_game)
   redirect to("/result/win") if instance.win?
   redirect to("/result/loss") if instance.bust?
@@ -35,9 +40,9 @@ post '/blackjack' do
   instance = Blackjack.new(load_game)
   if params[:input] == "hit"
       instance.hit
-      @money -= 10
+      # @money -= 10
 
-      bankroll = @money
+      # set_bankroll(@money)
   end
   save_game(instance.game)
   # binding.pry
@@ -57,10 +62,11 @@ get '/result/win' do
   instance = Blackjack.new(load_game)
   @output = instance.render
   cookies["game_state"] = nil
+  # response.delete_cookie("game_state")
   @money = bankroll
   @money += 20
-  bankroll=@money
-  binding.pry
+  set_bankroll(@money)
+  # binding.pry
   erb :win
 end
 
@@ -68,6 +74,7 @@ get '/result/loss' do
   instance = Blackjack.new(load_game)
   @output = instance.render
   cookies["game_state"] = nil
+  # response.delete_cookie("game_state")
   # binding.pry
   erb :loss
 end

@@ -20,7 +20,7 @@ module Cookies
     end
   end
 
-  def bankroll=(amt)
+  def set_bankroll(amt)
     session["bankroll"] = amt.to_s
   end
 
