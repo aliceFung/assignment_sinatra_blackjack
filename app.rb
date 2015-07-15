@@ -13,10 +13,13 @@ helpers Cookies
 
 get '/' do
   erb :index
+  sleep (2)
+  redirect to '/blackjack'
 end
 
 get '/blackjack' do
   @money = bankroll
+  
   instance = Blackjack.new(load_game)
   redirect to("/result/win") if instance.win?
   redirect to("/result/loss") if instance.bust?
@@ -28,11 +31,13 @@ get '/blackjack' do
 end
 
 post '/blackjack' do
-
+  @money = bankroll
   instance = Blackjack.new(load_game)
   if params[:input] == "hit"
       instance.hit
-      bankroll -= 10
+      @money -= 10
+
+      bankroll = @money
   end
   save_game(instance.game)
   # binding.pry
@@ -52,7 +57,10 @@ get '/result/win' do
   instance = Blackjack.new(load_game)
   @output = instance.render
   cookies["game_state"] = nil
-  # binding.pry
+  @money = bankroll
+  @money += 20
+  bankroll=@money
+  binding.pry
   erb :win
 end
 
