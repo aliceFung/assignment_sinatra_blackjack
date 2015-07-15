@@ -11,17 +11,17 @@ module Cookies
     end
   end
 
-  def bankroll
-    unless (session["bankroll"].nil?)
-      return session["bankroll"].to_i
-    else
-      session["bankroll"] = 100.to_s
-      return 100
-    end
-  end
+  # def bankroll
+  #   unless (session["bankroll"].nil?)
+  #     return session["bankroll"].to_i
+  #   else
+  #     session["bankroll"] = 100.to_s
+  #     return 100
+  #   end
+  # end
 
-  def set_bankroll(amt)
-    session["bankroll"] = amt.to_s
-  end
+  # def set_bankroll(amt)
+  #   session["bankroll"] = amt.to_s
+  # end
 
 end

@@ -13,21 +13,25 @@ helpers Cookies
 
 get '/' do
   erb :index
-  sleep (2)
-  redirect to '/blackjack'
+  # sleep (2)
+  # redirect to '/blackjack'
+
 end
 
 get '/blackjack' do
-  @money = bankroll
-  unless load_game
-    @money -= 10
+  instance = nil
+  if params[:input] == "new"
+    instance = Blackjack.new
+  else
+    instance = Blackjack.new(load_game)
   end
+  # @money = bankroll
+  # unless load_game
+  #   @money -= 10
+  # end
 
-  set_bankroll(@money)
+  # set_bankroll(@money)
 
-  instance = Blackjack.new(load_game)
-  redirect to("/result/win") if instance.win?
-  redirect to("/result/loss") if instance.bust?
 
   @output = instance.render
   save_game(instance.game)
@@ -36,45 +40,57 @@ get '/blackjack' do
 end
 
 post '/blackjack' do
-  @money = bankroll
+  # @money = bankroll
   instance = Blackjack.new(load_game)
   if params[:input] == "hit"
       instance.hit
-      # @money -= 10
-
-      # set_bankroll(@money)
   end
   save_game(instance.game)
-  # binding.pry
-  redirect to('/blackjack/dealer') if params[:input] == "stay"
-  redirect to('/blackjack')
+
+  if params[:input] == "stay"
+    redirect to('/blackjack/dealer')
+  else
+    redirect to('/blackjack')
+  end
 end
 
 get '/blackjack/dealer' do
   instance = Blackjack.new(load_game)
   instance.dealer_move
   save_game(instance.game)
-  redirect to("/result/win") if instance.win?
-  redirect to("/result/loss")
+  if instance.bust?
+    redirect to("/result/loss")
+  elsif instance.win?
+    redirect to("/result/win")
+  else
+    redirect to("/result/loss")
+  end
+  # if instance.win?
+  #   redirect to("/result/win")
+  # else
+  #   redirect to("/result/loss")
+  # end
 end
 
 get '/result/win' do
   instance = Blackjack.new(load_game)
   @output = instance.render
-  cookies["game_state"] = nil
-  # response.delete_cookie("game_state")
-  @money = bankroll
-  @money += 20
-  set_bankroll(@money)
-  # binding.pry
+  cookies.delete("game_state")
+  response.delete_cookie("game_state")
+  response.set_cookie("game_state", "")
   erb :win
+  #binding.pry
+  # @money = bankroll
+  # @money += 20
+  # set_bankroll(@money)
 end
 
 get '/result/loss' do
   instance = Blackjack.new(load_game)
   @output = instance.render
-  cookies["game_state"] = nil
-  # response.delete_cookie("game_state")
-  # binding.pry
+  cookies.delete("game_state")
+  response.delete_cookie("game_state")
+  response.set_cookie("game_state", "")
   erb :loss
+  #binding.pry
 end

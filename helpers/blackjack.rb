@@ -106,7 +106,7 @@ class Blackjack
   end
 
   def win?
-    bust?(@dealer) || (hand_value(@hand) > hand_value(@dealer))
+    bust?(@dealer) || ((hand_value(@hand) && hand_value(@hand)<=21) > hand_value(@dealer))
   end
 
   def blackjack?
