@@ -6,7 +6,9 @@ module Cookies
 
   def load_game
     cookie = request.cookies["game_state"]
-    JSON.parse(cookie) if cookie
+    unless (cookie.nil? || cookie == "")
+      JSON.parse(cookie)
+    end
   end
 
 end

@@ -106,11 +106,17 @@ class Blackjack
   end
 
   def win?
-    bust?(@dealer) # || blackjack?
+    bust?(@dealer) || (hand_value(@hand) > hand_value(@dealer))
   end
 
   def blackjack?
     hand_value(@hand) > 21
+  end
+
+  def dealer_move
+    until hand_value(@dealer)> 17
+      @dealer << @deck.pop
+    end
   end
 
 
