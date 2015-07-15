@@ -19,7 +19,7 @@ get /blackjack
 
 post /blackjack/hit
 
-  
+
 
 
 

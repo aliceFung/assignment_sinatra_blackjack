@@ -27,6 +27,3 @@ PLATFORMS
 DEPENDENCIES
   sinatra
   sinatra-contrib
-
-BUNDLED WITH
-   1.10.5
